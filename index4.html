@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>JS Redux</title>
+    <script src="https://wzrd.in/standalone/expect@latest"></script>
+    <script src="https://wzrd.in/standalone/deep-freeze@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root">React has not rendered yet</div>
+    <script type="text/babel">
+      const addCounter = (list) => {
+        return [...list, 0];
+      };
+
+      const removeCounter = (list, index) => {
+        return [
+          ...list.slice(0, index),
+          ...list.slice(index + 1)
+        ];
+      };
+
+      const incrementCounter = (list, index) => {
+        return [
+          ...list.slice(0, index),
+          list[index] + 1,
+          ...list.slice(index + 1)
+        ];
+      };
+
+      const testIncrementCounter = () => {
+        let listBefore = [0, 10, 20];
+        let listAfter = [0, 11, 20];
+
+        deepFreeze(listBefore);
+
+        expect(
+          incrementCounter(listBefore, 1)
+        ).toEqual(listAfter);
+      };
+
+      const testAddCounter = () => {
+        let listBefore = [];
+        let listAfter = [0];
+
+        deepFreeze(listBefore);
+
+        expect(
+          addCounter(listBefore)
+        ).toEqual(listAfter);
+      };
+
+      const testRemoveCounter = () => {
+        let listBefore = [0, 10, 20];
+        let listAfter = [0, 20];
+
+        deepFreeze(listBefore);
+
+        expect(
+          removeCounter(listBefore, 1)
+        ).toEqual(listAfter);
+      };
+
+      testAddCounter();
+      testRemoveCounter();
+      testIncrementCounter();
+      console.log('All tests passed.');
+    </script>
+  </body>
+</html>
